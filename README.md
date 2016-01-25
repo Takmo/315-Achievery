@@ -19,7 +19,7 @@ the Spring 2016 semester. Used with permission.
 
 ## Important Decisions
 
-1. Normalization Versus Denormalization
+### Normalization Versus Denormalization
 
 When planning databases, a common topic is data (de)normalization.
 
