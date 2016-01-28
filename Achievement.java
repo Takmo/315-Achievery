@@ -1,12 +1,14 @@
 package com.bitwisehero.course315.achievery;
 
+import java.util.ArrayList;
+
 public class Achievement {
 
     private int achievementId;  // The ID number of the achievement.
     private Game parentGame;    // The game that this achievement belongs to.
     private String name;        // The lexical name of the achievement.
 
-    private List<Player> achievementOwners; // Players who unlocked this achievement.
+    private ArrayList<Player> achievementOwners;    // Players who unlocked this achievement.
 
     // Constructor
     public Achievement(Game parentGame, int achievementId, String name) {
@@ -17,7 +19,7 @@ public class Achievement {
     }
 
     // Returns the achievementId.
-    public int getAchievementId() {
+    public int getId() {
         return this.achievementId;
     }
 
@@ -29,6 +31,13 @@ public class Achievement {
     // Returns the lexical name of the Achievement.
     public String getName() {
         return this.name;
+    }
+
+    // Adds a player as an owner of this achievement.
+    public void addOwner(Player player) {
+        if (!this.achievementOwners.contains(player)) {
+            this.achievementOwners.add(player);
+        }
     }
 
     // Returns an array of all players who have unlocked this Achievement.
