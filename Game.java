@@ -18,51 +18,47 @@ public class Game {
         this.players = new ArrayList<Player>();
     }
 
-    // Returns the gameId.
+    // Getters - provide a friendly way of accessing attributes.
+    
     public int getId() {
         return this.gameId;
     }
 
-    // Returns the name of the game.
     public String getName() {
         return this.name;
     }
 
-    // Add an achievement for this game.
-    public void addAchievement(Achievement achievement) {
-        if (!this.achievements.contains(achievement)) {
-            this.achievements.add(achievement);
-        }
-    }
-
-    // Returns all achievements for this game.
     public Achievement[] getAchievements() {
         Achievement[] achievementArray = new Achievement[this.achievements.size()];
         achievementArray = this.achievements.toArray(achievementArray);
         return achievementArray;
     }
 
-    // Returns the number of achivements.
     public int getNumAchievements() {
         return this.achievements.size();
     }
 
-    // Adds a player for this game.
-    public void addPlayer(Player player) {
-        if (!this.players.contains(player)) {
-            this.players.add(player);
-        }
-    }
-
-    // Returns all of the players for this game.
     public Player[] getPlayers() {
         Player[] playerArray = new Player[this.players.size()];
         playerArray = this.players.toArray(playerArray);
         return playerArray;
     }
 
-    // Returns the number of players.
     public int getNumPlayers() {
         return this.players.size();
+    }
+
+    // Modifiers - the game has changed.
+
+    public void addAchievement(Achievement achievement) {
+        if (!this.achievements.contains(achievement)) {
+            this.achievements.add(achievement);
+        }
+    }
+
+    public void addPlayer(Player player) {
+        if (!this.players.contains(player)) {
+            this.players.add(player);
+        }
     }
 }
