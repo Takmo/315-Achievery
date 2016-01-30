@@ -1,5 +1,6 @@
 package com.bitwisehero.course315.achievery;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Tracker {
@@ -36,7 +37,7 @@ public class Tracker {
         // And we might have to consider a second player.
         Player secondPlayer = null;
         if (command.secondPlayerId != -1) {
-            this.games.get(command.secondPlayerId);
+            secondPlayer = this.players.get(command.secondPlayerId);
         }
 
         switch (command.commandType) {
@@ -60,11 +61,7 @@ public class Tracker {
                 break;
 
             case AddAchievement:
-                // Verify that the player and game exist but that the achievement does not.
-                if (player == null) {
-                    System.err.println("Invalid playerId: " + command.playerId + " does not exist.");
-                    return;
-                }
+                // Verify that the game exists but that the achievement does not.
                 if (game == null) {
                     System.err.println("Invalid gameId: " + command.gameId + "does not exist.");
                     return;
@@ -81,7 +78,7 @@ public class Tracker {
                 break;
 
             case Plays:
-                // Verify that both the player and game exit.
+                // Verify that both the player and game exist.
                 if (player == null) {
                     System.err.println("Invalid playerId: " + command.playerId + " does not exist.");
                     return;
@@ -107,6 +104,7 @@ public class Tracker {
 
                 // Make friends!
                 player.addFriend(secondPlayer);
+                secondPlayer.addFriend(player);
                 break;
 
             case Achieve:
@@ -130,7 +128,42 @@ public class Tracker {
                 break;
 
             case FriendsWhoPlay:
-                System.err.println("Still working on this!");
+                // Verify that both the player and game exist, and that the player plays that game.
+                if (player == null) {
+                    System.err.println("Invalid playerId: " + command.playerId + " does not exist.");
+                    return;
+                }
+                if (game == null) {
+                    System.err.println("Invalid gameId: " + command.gameId + "does not exist.");
+                    return;
+                }
+                if (!player.hasGame(game)) {
+                    System.err.println("Player " + command.playerId + " does not play " + command.gameId + ".");
+                    return;
+                }
+
+                // Get the list of friends and cull out the ones who don't play.
+                ArrayList<Player> friendsWhoPlay = new ArrayList<Player>();
+                for (Player friend : player.getFriends()) {
+                    if (friend.hasGame(game)) {
+                        friendsWhoPlay.add(friend);
+                    }
+                }
+
+                // Print everything in a pretty format.
+                System.out.println("Player: " + player.getName());
+                System.out.println("Game: " + game.getName());
+                System.out.println("IGN: " + player.getPlayerGameData(game).getScreenName() + "\n");
+                
+                System.out.println("PLAYER\t\tPOINTS\t\tIGN");
+                System.out.println("-------------------------------------------------");
+
+                for (Player friend : friendsWhoPlay) {
+                    System.out.println(friend.getName() + "\t\t" +
+                            friend.getPlayerGameData(game).getPoints() + "\t\t" +
+                            friend.getPlayerGameData(game).getScreenName());
+                }
+                
                 break;
 
             case ComparePlayers:

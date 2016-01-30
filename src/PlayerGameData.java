@@ -28,7 +28,7 @@ public class PlayerGameData {
     }
 
     public Player getPlayer() {
-        return this.getPlayer();
+        return this.player;
     }
 
     public String getScreenName() {
@@ -39,6 +39,16 @@ public class PlayerGameData {
         Achievement[] achievementArray = new Achievement[this.achievements.size()];
         achievementArray = this.achievements.toArray(achievementArray);
         return achievementArray;
+    }
+
+    // Aggregators - Aggregate information and present it.
+
+    public int getPoints() {
+        int total = 0;
+        for (Achievement achievement : this.achievements) {
+            total += achievement.getPoints();
+        }
+        return total;
     }
 
     // Modifiers - change the player's game data somehow.

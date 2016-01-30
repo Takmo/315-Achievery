@@ -30,11 +30,15 @@ public class Player {
         return this.name;
     }
 
-    public PlayerGameData[] getPlayerGameData() {
+    public PlayerGameData[] getAllPlayerGameData() {
         Collection<PlayerGameData> gameDataValues = this.gamesOwned.values();
         PlayerGameData[] gameDataArray = new PlayerGameData[gameDataValues.size()];
         gameDataArray = gameDataValues.toArray(gameDataArray);
         return gameDataArray;
+    }
+
+    public PlayerGameData getPlayerGameData(Game game) {
+        return this.gamesOwned.get(game);
     }
 
     public boolean hasGame(Game game) {
@@ -70,6 +74,5 @@ public class Player {
             return;
         }
         this.friends.add(friend);
-        friend.addFriend(this);
     }
 }

@@ -9,6 +9,9 @@ public class Main {
         // Setup the CommandParser.
         CommandParser parser = new CommandParser();
 
+        // Setup the Tracker.
+        Tracker tracker = new Tracker();
+
         // Loop through input.
         Scanner inputScanner = new Scanner(System.in);
         while (inputScanner.hasNext()) {
@@ -17,7 +20,9 @@ public class Main {
             if (input.isEmpty()) {
                 continue;
             }
+            //System.out.println("INPUT: " + input);
             Command command = parser.parse(input);
+            tracker.handleCommand(command);
         }
     }
 }
