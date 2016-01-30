@@ -33,6 +33,12 @@ public class Tracker {
             achievement = game.getAchievement(command.achievementId);
         }
 
+        // And we might have to consider a second player.
+        Player secondPlayer = null;
+        if (command.secondPlayerId != -1) {
+            this.games.get(command.secondPlayerId);
+        }
+
         switch (command.commandType) {
 
             case AddPlayer:
@@ -90,7 +96,17 @@ public class Tracker {
                 break;
 
             case AddFriends:
-                System.err.println("Still working on this!");
+                // Verify that both players exist.
+                if (player == null) {
+                    System.err.println("Invalid playerId: " + command.playerId + " does not exist.");
+                    return;
+                }
+                if (secondPlayer == null) {
+                    System.err.println("Invalid playerId: " + command.secondPlayerId + " does not exist.");
+                }
+
+                // Make friends!
+                player.addFriend(secondPlayer);
                 break;
 
             case Achieve:

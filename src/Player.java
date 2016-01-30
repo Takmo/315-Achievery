@@ -10,12 +10,14 @@ public class Player {
     private String name;    // The player's name in our system.
 
     private HashMap<Game, PlayerGameData> gamesOwned;   // Map from gameId to PlayerGameData.
+    private ArrayList<Player> friends;                  // Friends
 
     // Constructor
     public Player(int playerId, String name) {
         this.playerId = playerId;
         this.name = name;
         this.gamesOwned = new HashMap<Game, PlayerGameData>();
+        this.friends = new ArrayList<Player>();
     }
 
     // Getters - access attributes in a friendly way.
@@ -39,6 +41,12 @@ public class Player {
         return this.gamesOwned.containsKey(game);
     }
 
+    public Player[] getFriends() {
+        Player[] friendsArray = new Player[this.friends.size()];
+        friendsArray = this.friends.toArray(friendsArray);
+        return friendsArray;
+    }
+
     // Modifiers - change the player somehow.
 
     public void addAchievement(Game game, Achievement achievement) {
@@ -56,5 +64,12 @@ public class Player {
             this.gamesOwned.put(game, new PlayerGameData(game, this, screenName));
         }
     }
-
+    
+    public void addFriend(Player friend) {
+        if (this.friends.contains(friend)) {
+            return;
+        }
+        this.friends.add(friend);
+        friend.addFriend(this);
+    }
 }
