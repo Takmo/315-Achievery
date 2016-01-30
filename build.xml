@@ -1,0 +1,20 @@
+<project>
+    <target name="clean">
+        <delete dir="build" />
+    </target>
+    <target name="compile">
+        <mkdir dir="build/classes" />
+        <javac srcdir="src" destdir="build/classes" debug="true" debuglevel="lines,vars,source">
+            <compilerarg value="-Xlint:deprecation"/>
+        </javac>
+    </target>
+    <target name="jar" depends="compile">
+        <mkdir dir="build/jar" />
+        <jar destfile="build/jar/Achievery.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="com.bitwisehero.course315.achievery.Main" />
+            </manifest>
+        </jar>
+        <copy file="build/jar/Achievery.jar" tofile="./Achievery.jar" />
+    </target>
+</project>

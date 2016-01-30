@@ -9,7 +9,8 @@ public class Command {
     public int playerId;                // ID of player (if applicable)
 
     public String name;                 // name of achievement or player (if applicable)
-    public int secondaryPlayerId;       // ID of second player (if applicable)
+    public int secondPlayerId;          // ID of second player (if applicable)
+    public int points;                  // The points that an achievement awards.
 
     // Constructor - just zero everything out, except for type.
     public Command(CommandType commandType) {
@@ -18,7 +19,8 @@ public class Command {
         this.gameId = -1;
         this.playerId = -1;
         this.name = "";
-        this.secondaryPlayerId = -1;
+        this.secondPlayerId = -1;
+        this.points = -1;
     }
 
     // Mark that the Command is no longer valid.
