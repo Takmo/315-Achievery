@@ -29,7 +29,7 @@ public class CommandParser {
     }
 
     public Command parse(String input) {
-        Command command = new Command(CommandType.END);
+        Command command = new Command();
         try {
             // Clean up the input line for processing.
             input = input.trim(); // Delete all leading and trailing whitespace.
@@ -37,6 +37,7 @@ public class CommandParser {
 
             // Extract the command.
             String[] commandSplit = input.split(" ", 2);
+            command.commandTypeText = commandSplit[0];
             command.commandType = stringToCommandType(commandSplit[0]);
 
             // Now handle each command separately.
@@ -64,7 +65,7 @@ public class CommandParser {
                     String[] namePointsSplit = achievementSplit[2].split("\"", 3);
                     // Note that namePointsSplit[0] should be an empty string.
                     command.name = namePointsSplit[1];
-                    command.points = Integer.parseInt(namePointsSplit[2]);
+                    command.points = Integer.parseInt(namePointsSplit[2].trim());
                     break;
 
                 case Plays:
@@ -120,7 +121,8 @@ public class CommandParser {
                     break;
             }
         } catch (Exception e) {
-            System.err.println("Invalid formatting for commmand.");
+            System.err.println("Invalid formatting for commmand type: " + command.commandTypeText);
+            System.err.println("INPUT: " + input);
         }
         return command;
     }

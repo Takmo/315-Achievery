@@ -14,7 +14,7 @@ public class Main {
         while (inputScanner.hasNext()) {
             String input = inputScanner.nextLine();
             // Skip blank lines.
-            if (input == "") {
+            if (input.isEmpty()) {
                 continue;
             }
             Command command = parser.parse(input);
