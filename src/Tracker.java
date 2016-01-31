@@ -240,7 +240,30 @@ public class Tracker {
                 break;
 
             case SummarizeGame:
-                System.err.println("Still working on this!");
+                // Game must exist.
+                if (game == null) {
+                    System.err.println("Invalid gameId: " + command.gameId + "does not exist.");
+                    return;
+                }
+
+                // Print the general information.
+                System.out.println("Game: " + game.getName());
+                System.out.println("Total Players: " + game.getNumPlayers());
+
+                // Print player information.
+                System.out.format("\n%-20s%-15s%-20s\n", "Player", "Gamerscore", "IGN");
+                System.out.println("------------------------------------------------------------");
+                for (Player p : game.getPlayers()) {
+                    System.out.format("%-20s%-15s%-20s\n", p.getName(), p.getPlayerGameData(game).getPoints(),
+                            p.getPlayerGameData(game).getScreenName());
+                }
+
+                // Print achievement stats.
+                System.out.format("\n%-25s%-15s\n", "Achievement", "Times Achieved");
+                System.out.println("----------------------------------------");
+                for (Achievement ach : game.getAllAchievements()) {
+                    System.out.format("%-25s%-15s\n", ach.getName(), ach.getNumAchievementOwners());
+                }
                 break;
 
             case SummarizeAchievement:
