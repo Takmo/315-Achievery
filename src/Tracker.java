@@ -1,6 +1,8 @@
 package com.bitwisehero.course315.achievery;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Tracker {
@@ -142,13 +144,14 @@ public class Tracker {
                     return;
                 }
 
-                // Get the list of friends and cull out the ones who don't play.
-                ArrayList<Player> friendsWhoPlay = new ArrayList<Player>();
+                // Get the list of friends gamedata and cull out the ones who don't play.
+                ArrayList<PlayerGameData> friendsWhoPlay = new ArrayList<PlayerGameData>();
                 for (Player friend : player.getFriends()) {
                     if (friend.hasGame(game)) {
-                        friendsWhoPlay.add(friend);
+                        friendsWhoPlay.add(friend.getPlayerGameData(game));
                     }
                 }
+                Collections.sort(friendsWhoPlay, new PlayerGameDataComparator());
 
                 // Print everything in a pretty format.
                 System.out.println("Player: " + player.getName());
@@ -158,9 +161,9 @@ public class Tracker {
                 System.out.format("%-20s\t%-6s\t%-20s\n", "Player", "Score", "IGN");
                 System.out.println("------------------------------------------------------");
 
-                for (Player friend : friendsWhoPlay) {
-                    PlayerGameData pgd = friend.getPlayerGameData(game);
-                    System.out.format("%-20s\t%-6d\t%-20s\n", friend.getName(), pgd.getPoints(), pgd.getScreenName());
+                for (PlayerGameData friendData : friendsWhoPlay) {
+                    System.out.format("%-20s\t%-6d\t%-20s\n", friendData.getPlayer().getName(),
+                            friendData.getPoints(), friendData.getScreenName());
                 }
                 
                 break;
@@ -196,8 +199,11 @@ public class Tracker {
                 System.out.format("%-20s%-10s%-30s\n", "Achievement", "Points", "Unlocked By");
                 System.out.println("------------------------------------------------------------");
 
+                // Get all achievements and sort them in decreasing order by gamerscore.
+                ArrayList<Achievement> playerAchievements = new ArrayList<Achievement>(Arrays.asList(game.getAllAchievements()));
+                Collections.sort(playerAchievements, new AchievementComparator());
                 // Loop through each achievement to see if a player has earned it.
-                for (Achievement ach : game.getAllAchievements()) {
+                for (Achievement ach : playerAchievements) {
                     if (ach.hasAchievementOwner(player) && ach.hasAchievementOwner(secondPlayer)) {
                         System.out.format("%-20s%-10s%-30s\n", ach.getName(), ach.getPoints(), "Both");
                     }
@@ -224,7 +230,9 @@ public class Tracker {
                 System.out.println("--------------------------------------------------------------------------------");
 
                 // Loop through all games and print their information.
-                for (PlayerGameData pgd : player.getAllPlayerGameData()) {
+                ArrayList<PlayerGameData> gameDatas = new ArrayList<PlayerGameData>(Arrays.asList(player.getAllPlayerGameData()));
+                Collections.sort(gameDatas, new PlayerGameDataComparator());
+                for (PlayerGameData pgd : gameDatas) {
                     String achievementFraction = String.format("%d/%d",
                             pgd.getNumAchievements(), pgd.getGame().getNumAchievements());
                     System.out.format("%-25s%-20s%-15s%-20s\n", pgd.getGame().getName(),
@@ -234,7 +242,9 @@ public class Tracker {
                 // Now print out their friends.
                 System.out.format("\n%-15s%-22s\n", "Friend", "Total Gamerscore");
                 System.out.println("---------------------------------");
-                for (Player friend : player.getFriends()) {
+                ArrayList<Player> summarizeFriends = new ArrayList<Player>(Arrays.asList(player.getFriends()));
+                Collections.sort(summarizeFriends, new PlayerComparator());
+                for (Player friend : summarizeFriends) {
                     System.out.format("%-20s%-10s\n", friend.getName(), friend.getTotalPoints());
                 }
                 break;
@@ -253,7 +263,9 @@ public class Tracker {
                 // Print player information.
                 System.out.format("\n%-20s%-15s%-20s\n", "Player", "Gamerscore", "IGN");
                 System.out.println("------------------------------------------------------------");
-                for (Player p : game.getPlayers()) {
+                ArrayList<Player> summarizePlayers = new ArrayList<Player>(Arrays.asList(game.getPlayers()));
+                Collections.sort(summarizePlayers, new PlayerComparator());
+                for (Player p : summarizePlayers) {
                     System.out.format("%-20s%-15s%-20s\n", p.getName(), p.getPlayerGameData(game).getPoints(),
                             p.getPlayerGameData(game).getScreenName());
                 }
@@ -261,7 +273,9 @@ public class Tracker {
                 // Print achievement stats.
                 System.out.format("\n%-25s%-15s\n", "Achievement", "Times Achieved");
                 System.out.println("----------------------------------------");
-                for (Achievement ach : game.getAllAchievements()) {
+                ArrayList<Achievement> gameAchievements = new ArrayList<Achievement>(Arrays.asList(game.getAllAchievements()));
+                Collections.sort(gameAchievements, new AchievementComparator());
+                for (Achievement ach : gameAchievements) {
                     System.out.format("%-25s%-15s\n", ach.getName(), ach.getNumAchievementOwners());
                 }
                 break;
