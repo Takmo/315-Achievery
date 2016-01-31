@@ -29,6 +29,10 @@ Once everything is compiled, you can run it using a line like this.
 
     java -jar Achievery.jar < whatever_file_here.txt
 
+Alternatively, if you don't want to install Apache Ant, you can use the makefile.
+
+    make
+
 ## Note on Submission Time
 
 Because I'd rather not leave this in a messy state, I'm going to continue working
