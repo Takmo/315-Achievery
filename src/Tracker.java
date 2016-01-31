@@ -152,22 +152,21 @@ public class Tracker {
 
                 // Print everything in a pretty format.
                 System.out.println("Player: " + player.getName());
-                System.out.println("Game: " + game.getName());
+                System.out.println("Gamerscore: " + player.getPlayerGameData(game).getPoints());
                 System.out.println("IGN: " + player.getPlayerGameData(game).getScreenName() + "\n");
                 
-                System.out.println("PLAYER\t\tPOINTS\t\tIGN");
-                System.out.println("-------------------------------------------------");
+                System.out.format("%-20s\t%-6s\t%-20s\n", "Player", "Score", "IGN");
+                System.out.println("------------------------------------------------------");
 
                 for (Player friend : friendsWhoPlay) {
-                    System.out.println(friend.getName() + "\t\t" +
-                            friend.getPlayerGameData(game).getPoints() + "\t\t" +
-                            friend.getPlayerGameData(game).getScreenName());
+                    PlayerGameData pgd = friend.getPlayerGameData(game);
+                    System.out.format("%-20s\t%-6d\t%-20s\n", friend.getName(), pgd.getPoints(), pgd.getScreenName());
                 }
                 
                 break;
 
             case ComparePlayers:
-                // Verify that both players and the game exist.
+                // Verify that both players and the game exist. Also, players must play this game.
                 if (player == null) {
                     System.err.println("Invalid playerId: " + command.playerId + " does not exist.");
                     return;
@@ -188,26 +187,55 @@ public class Tracker {
                     return;
                 }
 
-                // Loop through all achievements and print out if either player has earned it.
-                System.out.println("Game: " + game.getName());
-                System.out.println(player.getName() + ": " + player.getPlayerGameData(game).getPoints());
-                System.out.println(secondPlayer.getName() + ": " + secondPlayer.getPlayerGameData(game).getPoints());
-                System.out.println("-------------------------------------------------");
+                // Print general information.
+                System.out.println("Game: " + game.getName() + "\n");
+                System.out.println("Player: " + player.getName());
+                System.out.println("Gamerscore: " + player.getPlayerGameData(game).getPoints() + "\n");
+                System.out.println("Player: " + secondPlayer.getName());
+                System.out.println("Gamerscore: " + secondPlayer.getPlayerGameData(game).getPoints() + "\n");
+                System.out.format("%-20s%-10s%-30s\n", "Achievement", "Points", "Unlocked By");
+                System.out.println("------------------------------------------------------------");
+
+                // Loop through each achievement to see if a player has earned it.
                 for (Achievement ach : game.getAllAchievements()) {
                     if (ach.hasAchievementOwner(player) && ach.hasAchievementOwner(secondPlayer)) {
-                        System.out.println("\"" + ach.getName() + "\": unlocked by both.");
+                        System.out.format("%-20s%-10s%-30s\n", ach.getName(), ach.getPoints(), "Both");
                     }
                     else if (ach.hasAchievementOwner(player) && !ach.hasAchievementOwner(secondPlayer)) {
-                        System.out.println("\"" + ach.getName() + "\": unlocked by " + player.getName());
+                        System.out.format("%-20s%-10s%-30s\n", ach.getName(), ach.getPoints(), player.getName());
                     }
                     else if (!ach.hasAchievementOwner(player) && ach.hasAchievementOwner(secondPlayer)) {
-                        System.out.println("\"" + ach.getName() + "\": unlocked by " + secondPlayer.getName());
+                        System.out.format("%-20s%-10s%-30s\n", ach.getName(), ach.getPoints(), secondPlayer.getName());
                     }
                 }
                 break;
 
             case SummarizePlayer:
-                System.err.println("Still working on this!");
+                // Verify that this player exists.
+                if (player == null) {
+                    System.err.println("Invalid playerId: " + command.playerId + " does not exist.");
+                    return;
+                }
+
+                // Print general information.
+                System.out.println("Player: " + player.getName());
+                System.out.println("Total Gamerscore: " + player.getTotalPoints() + "\n");
+                System.out.format("%-25s%-20s%-15s%-20s\n", "Game", "Achievements", "Gamerscore", "IGN");
+                System.out.println("--------------------------------------------------------------------------------");
+
+                // Loop through all games and print their information.
+                for (PlayerGameData pgd : player.getAllPlayerGameData()) {
+                    String achievementFraction = "";
+                    System.out.format("%-25s%-20s%-15s%-20s\n", pgd.getGame().getName(),
+                            achievementFraction, pgd.getPoints(), pgd.getScreenName());
+                }
+                
+                // Now print out their friends.
+                System.out.format("\n%-15s%-22s\n", "Friend", "Total Gamerscore");
+                System.out.println("---------------------------------");
+                for (Player friend : player.getFriends()) {
+                    System.out.format("%-20s%-10s\n", friend.getName(), friend.getTotalPoints());
+                }
                 break;
 
             case SummarizeGame:

@@ -51,6 +51,14 @@ public class Player {
         return friendsArray;
     }
 
+    public int getTotalPoints() {
+        int total = 0;
+        for (PlayerGameData pgd : this.getAllPlayerGameData()) {
+            total += pgd.getPoints();
+        }
+        return total;
+    }
+
     // Modifiers - change the player somehow.
 
     public void addAchievement(Game game, Achievement achievement) {

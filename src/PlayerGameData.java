@@ -41,6 +41,10 @@ public class PlayerGameData {
         return achievementArray;
     }
 
+    public int getNumAchievements() {
+        return this.achievements.size();
+    }
+
     // Aggregators - Aggregate information and present it.
 
     public int getPoints() {
