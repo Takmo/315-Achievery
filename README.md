@@ -17,6 +17,19 @@ Code freely available under the MIT license. Specifications and reference
 website owned and maintained by course instructors for CSCE 315.502 during
 the Spring 2016 semester. Used with permission.
 
+## Usage Instructions
+
+The build system I chose to use was the Apache Ant build system. Assuming you have
+Apache Ant installed (which is really easy to do!), you can compile everything
+by running the following command.
+
+    ant jar
+
+Once everything is compiled, you can run it using a line like this.
+
+    java -jar Achievery.jar < whatever_file_here.txt
+;q
+
 ## Important Decisions
 
 ### Normalization Versus Denormalization
