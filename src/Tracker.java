@@ -148,22 +148,22 @@ public class Tracker {
                 ArrayList<PlayerGameData> friendsWhoPlay = new ArrayList<PlayerGameData>();
                 for (Player friend : player.getFriends()) {
                     if (friend.hasGame(game)) {
-                        friendsWhoPlay.add(friend.getPlayerGameData(game));
+                        friendsWhoPlay.add(friend.getGameData(game));
                     }
                 }
                 Collections.sort(friendsWhoPlay, new PlayerGameDataComparator());
 
                 // Print everything in a pretty format.
                 System.out.println("Player: " + player.getName());
-                System.out.println("Gamerscore: " + player.getPlayerGameData(game).getPoints());
-                System.out.println("IGN: " + player.getPlayerGameData(game).getScreenName() + "\n");
+                System.out.println("Gamerscore: " + player.getGameData(game).getGamerscore());
+                System.out.println("IGN: " + player.getGameData(game).getScreenName() + "\n");
                 
                 System.out.format("%-20s\t%-6s\t%-20s\n", "Player", "Score", "IGN");
                 System.out.println("------------------------------------------------------");
 
                 for (PlayerGameData friendData : friendsWhoPlay) {
                     System.out.format("%-20s\t%-6d\t%-20s\n", friendData.getPlayer().getName(),
-                            friendData.getPoints(), friendData.getScreenName());
+                            friendData.getGamerscore(), friendData.getScreenName());
                 }
                 
                 break;
@@ -193,24 +193,24 @@ public class Tracker {
                 // Print general information.
                 System.out.println("Game: " + game.getName() + "\n");
                 System.out.println("Player: " + player.getName());
-                System.out.println("Gamerscore: " + player.getPlayerGameData(game).getPoints() + "\n");
+                System.out.println("Gamerscore: " + player.getGameData(game).getGamerscore() + "\n");
                 System.out.println("Player: " + secondPlayer.getName());
-                System.out.println("Gamerscore: " + secondPlayer.getPlayerGameData(game).getPoints() + "\n");
+                System.out.println("Gamerscore: " + secondPlayer.getGameData(game).getGamerscore() + "\n");
                 System.out.format("%-20s%-10s%-30s\n", "Achievement", "Points", "Unlocked By");
                 System.out.println("------------------------------------------------------------");
 
                 // Get all achievements and sort them in decreasing order by gamerscore.
-                ArrayList<Achievement> playerAchievements = new ArrayList<Achievement>(Arrays.asList(game.getAllAchievements()));
+                ArrayList<Achievement> playerAchievements = game.getAllAchievements();
                 Collections.sort(playerAchievements, new AchievementComparator());
                 // Loop through each achievement to see if a player has earned it.
                 for (Achievement ach : playerAchievements) {
-                    if (ach.hasAchievementOwner(player) && ach.hasAchievementOwner(secondPlayer)) {
+                    if (ach.hasPlayer(player) && ach.hasPlayer(secondPlayer)) {
                         System.out.format("%-20s%-10s%-30s\n", ach.getName(), ach.getPoints(), "Both");
                     }
-                    else if (ach.hasAchievementOwner(player) && !ach.hasAchievementOwner(secondPlayer)) {
+                    else if (ach.hasPlayer(player) && !ach.hasPlayer(secondPlayer)) {
                         System.out.format("%-20s%-10s%-30s\n", ach.getName(), ach.getPoints(), player.getName());
                     }
-                    else if (!ach.hasAchievementOwner(player) && ach.hasAchievementOwner(secondPlayer)) {
+                    else if (!ach.hasPlayer(player) && ach.hasPlayer(secondPlayer)) {
                         System.out.format("%-20s%-10s%-30s\n", ach.getName(), ach.getPoints(), secondPlayer.getName());
                     }
                 }
@@ -225,27 +225,27 @@ public class Tracker {
 
                 // Print general information.
                 System.out.println("Player: " + player.getName());
-                System.out.println("Total Gamerscore: " + player.getTotalPoints() + "\n");
+                System.out.println("Total Gamerscore: " + player.getTotalGamerscore() + "\n");
                 System.out.format("%-25s%-20s%-15s%-20s\n", "Game", "Achievements", "Gamerscore", "IGN");
                 System.out.println("--------------------------------------------------------------------------------");
 
                 // Loop through all games and print their information.
-                ArrayList<PlayerGameData> gameDatas = new ArrayList<PlayerGameData>(Arrays.asList(player.getAllPlayerGameData()));
+                ArrayList<PlayerGameData> gameDatas = player.getAllGameData();
                 Collections.sort(gameDatas, new PlayerGameDataComparator());
                 for (PlayerGameData pgd : gameDatas) {
                     String achievementFraction = String.format("%d/%d",
                             pgd.getNumAchievements(), pgd.getGame().getNumAchievements());
                     System.out.format("%-25s%-20s%-15s%-20s\n", pgd.getGame().getName(),
-                            achievementFraction, pgd.getPoints(), pgd.getScreenName());
+                            achievementFraction, pgd.getGamerscore(), pgd.getScreenName());
                 }
                 
                 // Now print out their friends.
                 System.out.format("\n%-15s%-22s\n", "Friend", "Total Gamerscore");
                 System.out.println("---------------------------------");
-                ArrayList<Player> summarizeFriends = new ArrayList<Player>(Arrays.asList(player.getFriends()));
+                ArrayList<Player> summarizeFriends = player.getFriends();
                 Collections.sort(summarizeFriends, new PlayerComparator());
                 for (Player friend : summarizeFriends) {
-                    System.out.format("%-20s%-10s\n", friend.getName(), friend.getTotalPoints());
+                    System.out.format("%-20s%-10s\n", friend.getName(), friend.getTotalGamerscore());
                 }
                 break;
 
@@ -263,20 +263,20 @@ public class Tracker {
                 // Print player information.
                 System.out.format("\n%-20s%-15s%-20s\n", "Player", "Gamerscore", "IGN");
                 System.out.println("------------------------------------------------------------");
-                ArrayList<Player> summarizePlayers = new ArrayList<Player>(Arrays.asList(game.getPlayers()));
+                ArrayList<Player> summarizePlayers = game.getPlayers();
                 Collections.sort(summarizePlayers, new PlayerComparator());
                 for (Player p : summarizePlayers) {
-                    System.out.format("%-20s%-15s%-20s\n", p.getName(), p.getPlayerGameData(game).getPoints(),
-                            p.getPlayerGameData(game).getScreenName());
+                    System.out.format("%-20s%-15s%-20s\n", p.getName(), p.getGameData(game).getGamerscore(),
+                            p.getGameData(game).getScreenName());
                 }
 
                 // Print achievement stats.
                 System.out.format("\n%-25s%-15s\n", "Achievement", "Times Achieved");
                 System.out.println("----------------------------------------");
-                ArrayList<Achievement> gameAchievements = new ArrayList<Achievement>(Arrays.asList(game.getAllAchievements()));
+                ArrayList<Achievement> gameAchievements = game.getAllAchievements();
                 Collections.sort(gameAchievements, new AchievementComparator());
                 for (Achievement ach : gameAchievements) {
-                    System.out.format("%-25s%-15s\n", ach.getName(), ach.getNumAchievementOwners());
+                    System.out.format("%-25s%-15s\n", ach.getName(), ach.getNumPlayers());
                 }
                 break;
 
@@ -296,13 +296,13 @@ public class Tracker {
                 System.out.println("Game: " + game.getName());
                 System.out.println("Achievement: " + achievement.getName());
                 System.out.println("Percent Players Unlocked: " +
-                        (100.0 * achievement.getNumAchievementOwners() / game.getNumPlayers()) + "%\n");
+                        (100.0 * achievement.getNumPlayers() / game.getNumPlayers()) + "%\n");
 
                 // Print all player information.
                 System.out.format("\n%-25s%-25s\n", "Player", "IGN");
                 System.out.println("--------------------------------------------------");
-                for (Player p : achievement.getAchievementOwners()) {
-                    System.out.format("%-25s%-25s\n", p.getName(), p.getPlayerGameData(game).getScreenName());
+                for (Player p : achievement.getPlayers()) {
+                    System.out.format("%-25s%-25s\n", p.getName(), p.getGameData(game).getScreenName());
                 }
                 break;
 

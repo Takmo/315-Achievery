@@ -4,6 +4,6 @@ import java.util.Comparator;
 
 class PlayerGameDataComparator implements Comparator<PlayerGameData> {
     public int compare(PlayerGameData left, PlayerGameData right) {
-        return right.getPoints() - left.getPoints();
+        return right.getGamerscore() - left.getGamerscore();
     }
 }

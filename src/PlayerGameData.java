@@ -35,10 +35,8 @@ public class PlayerGameData {
         return this.screenName;
     }
 
-    public Achievement[] getAchievements() {
-        Achievement[] achievementArray = new Achievement[this.achievements.size()];
-        achievementArray = this.achievements.toArray(achievementArray);
-        return achievementArray;
+    public ArrayList<Achievement> getAllAchievements() {
+        return new ArrayList<Achievement>(this.achievements);
     }
 
     public int getNumAchievements() {
@@ -47,12 +45,12 @@ public class PlayerGameData {
 
     // Aggregators - Aggregate information and present it.
 
-    public int getPoints() {
-        int total = 0;
+    public int getGamerscore() {
+        int gamerscore = 0;
         for (Achievement achievement : this.achievements) {
-            total += achievement.getPoints();
+            gamerscore += achievement.getPoints();
         }
-        return total;
+        return gamerscore;
     }
 
     // Modifiers - change the player's game data somehow.
@@ -62,7 +60,7 @@ public class PlayerGameData {
             this.achievements.add(achievement);
 
             // Tell this achievement that our player plays it.
-            achievement.addOwner(this.getPlayer());
+            achievement.addPlayer(this.getPlayer());
         }
     }
 }

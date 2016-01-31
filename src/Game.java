@@ -34,21 +34,16 @@ public class Game {
         return this.achievements.get(achievementId);
     }
 
-    public Achievement[] getAllAchievements() {
-        Collection<Achievement> achievementValues = this.achievements.values();
-        Achievement[] achievementArray = new Achievement[achievementValues.size()];
-        achievementArray = achievementValues.toArray(achievementArray);
-        return achievementArray;
+    public ArrayList<Achievement> getAllAchievements() {
+        return new ArrayList<Achievement>(this.achievements.values());
     }
 
     public int getNumAchievements() {
         return this.achievements.size();
     }
 
-    public Player[] getPlayers() {
-        Player[] playerArray = new Player[this.players.size()];
-        playerArray = this.players.toArray(playerArray);
-        return playerArray;
+    public ArrayList<Player> getPlayers() {
+        return new ArrayList<Player>(this.players);
     }
 
     public int getNumPlayers() {

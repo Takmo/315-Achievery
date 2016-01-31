@@ -9,14 +9,14 @@ public class Player {
     private int playerId;   // The player's ID.
     private String name;    // The player's name in our system.
 
-    private HashMap<Game, PlayerGameData> gamesOwned;   // Map from gameId to PlayerGameData.
-    private ArrayList<Player> friends;                  // Friends
+    private HashMap<Game, PlayerGameData> games;    // Map from gameId to PlayerGameData.
+    private ArrayList<Player> friends;              // Friends
 
     // Constructor
     public Player(int playerId, String name) {
         this.playerId = playerId;
         this.name = name;
-        this.gamesOwned = new HashMap<Game, PlayerGameData>();
+        this.games = new HashMap<Game, PlayerGameData>();
         this.friends = new ArrayList<Player>();
     }
 
@@ -30,31 +30,26 @@ public class Player {
         return this.name;
     }
 
-    public PlayerGameData[] getAllPlayerGameData() {
-        Collection<PlayerGameData> gameDataValues = this.gamesOwned.values();
-        PlayerGameData[] gameDataArray = new PlayerGameData[gameDataValues.size()];
-        gameDataArray = gameDataValues.toArray(gameDataArray);
-        return gameDataArray;
+    public ArrayList<PlayerGameData> getAllGameData() {
+        return new ArrayList<PlayerGameData>(this.games.values());
     }
 
-    public PlayerGameData getPlayerGameData(Game game) {
-        return this.gamesOwned.get(game);
+    public PlayerGameData getGameData(Game game) {
+        return this.games.get(game);
     }
 
     public boolean hasGame(Game game) {
-        return this.gamesOwned.containsKey(game);
+        return this.games.containsKey(game);
     }
 
-    public Player[] getFriends() {
-        Player[] friendsArray = new Player[this.friends.size()];
-        friendsArray = this.friends.toArray(friendsArray);
-        return friendsArray;
+    public ArrayList<Player> getFriends() {
+        return new ArrayList<Player>(this.friends);
     }
 
-    public int getTotalPoints() {
+    public int getTotalGamerscore() {
         int total = 0;
-        for (PlayerGameData pgd : this.getAllPlayerGameData()) {
-            total += pgd.getPoints();
+        for (PlayerGameData gameData : this.getAllGameData()) {
+            total += gameData.getGamerscore();
         }
         return total;
     }
@@ -68,19 +63,18 @@ public class Player {
                     "' because they do not play '" + game.getName() + "'.");
             return;
         }
-        this.gamesOwned.get(game).addAchievement(achievement);
+        this.games.get(game).addAchievement(achievement);
     }
 
     public void addGame(Game game, String screenName) {
         if (!this.hasGame(game)) {
-            this.gamesOwned.put(game, new PlayerGameData(game, this, screenName));
+            this.games.put(game, new PlayerGameData(game, this, screenName));
         }
     }
     
     public void addFriend(Player friend) {
-        if (this.friends.contains(friend)) {
-            return;
+        if (!this.friends.contains(friend)) {
+            this.friends.add(friend);
         }
-        this.friends.add(friend);
     }
 }

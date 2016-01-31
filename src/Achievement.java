@@ -5,19 +5,19 @@ import java.util.ArrayList;
 public class Achievement {
 
     private int achievementId;  // The ID number of the achievement.
-    private Game parentGame;    // The game that this achievement belongs to.
+    private Game game;          // The game that this achievement belongs to.
     private String name;        // The lexical name of the achievement.
     private int points;         // The points value of this achievement.
 
-    private ArrayList<Player> achievementOwners;    // Players who unlocked this achievement.
+    private ArrayList<Player> players;  // Players who unlocked this achievement.
 
     // Constructor
-    public Achievement(int achievementId, Game parentGame, String name, int points) {
-        this.parentGame = parentGame;
+    public Achievement(int achievementId, Game game, String name, int points) {
         this.achievementId = achievementId;
+        this.game = game;
         this.name = name;
         this.points = points;
-        this.achievementOwners = new ArrayList<Player>();
+        this.players = new ArrayList<Player>();
     }
 
     // Getters - Here, have some stuff.
@@ -26,8 +26,8 @@ public class Achievement {
         return this.achievementId;
     }
 
-    public Game getParentGame() {
-        return this.parentGame;
+    public Game getGame() {
+        return this.game;
     }
 
     public String getName() {
@@ -38,25 +38,23 @@ public class Achievement {
         return this.points;
     }
 
-    public Player[] getAchievementOwners() {
-        Player[] ownerArray = new Player[this.achievementOwners.size()];
-        ownerArray = this.achievementOwners.toArray(ownerArray);
-        return ownerArray;
+    public ArrayList<Player> getPlayers() {
+        return new ArrayList<Player>(this.players);
     }
 
-    public int getNumAchievementOwners() {
-        return this.achievementOwners.size();
+    public int getNumPlayers() {
+        return this.players.size();
     }
 
-    public boolean hasAchievementOwner(Player player) {
-        return this.achievementOwners.contains(player);
+    public boolean hasPlayer(Player player) {
+        return this.players.contains(player);
     }
 
     // Modifiers - change this achievement somehow.
 
-    public void addOwner(Player player) {
-        if (!this.hasAchievementOwner(player)) {
-            this.achievementOwners.add(player);
+    public void addPlayer(Player player) {
+        if (!this.hasPlayer(player)) {
+            this.players.add(player);
         }
     }
 }
