@@ -2,6 +2,9 @@ package com.bitwisehero.course315.achievery;
 
 import java.util.ArrayList;
 
+// PlayerGameData - contains all information and operations related to
+// a player's involvement in a single game tracked by this database.
+
 public class PlayerGameData {
 
     private Game game;          // The game that this data belongs to.

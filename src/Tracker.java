@@ -17,7 +17,7 @@ public class Tracker {
     }
 
     // Handle commands and such.
-    public void handleCommand(Command command) {
+    public void processCommand(Command command) {
         // Many of the commands require a Player, so if the playerId is set, try to get it.
         Player player = null;
         if (command.playerId != -1) {

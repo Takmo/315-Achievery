@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+// Player - contains all information and operations related to
+// a player in our database.
+
 public class Player {
 
     private int playerId;   // The player's ID.

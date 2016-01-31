@@ -2,6 +2,8 @@ package com.bitwisehero.course315.achievery;
 
 import java.util.ArrayList;
 
+// Achievement - holds all of the information related to an achievement.
+
 public class Achievement {
 
     private int achievementId;  // The ID number of the achievement.

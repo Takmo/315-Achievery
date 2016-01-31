@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+// Game - contains all information and operations relevant to a game in our system.
+
 public class Game {
 
     private int gameId;     // The ID number of this game.

@@ -1,5 +1,8 @@
 package com.bitwisehero.course315.achievery;
 
+// Command - contains all of the information necessary for
+// handling a command.
+
 public class Command {
 
     public CommandType commandType;     // Type of command input.

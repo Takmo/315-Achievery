@@ -3,10 +3,9 @@ package com.bitwisehero.course315.achievery;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-public class CommandParser {
+// CommandParser - converts an input string into a valid Command.
 
-    // Regex representing WHITESPACE.
-    private static final String WHITESPACE = "\\s+";
+public class CommandParser {
 
     // Contains the map of strings to valid CommandTypes.
     private HashMap<String, CommandType> stringCommandTypeMap;
@@ -28,92 +27,128 @@ public class CommandParser {
         stringCommandTypeMap.put("AchievementRanking", CommandType.AchievementRanking);
     }
 
-    public Command parse(String input) {
-        Command command = new Command();
-        try {
-            // Clean up the input line for processing.
-            input = input.trim(); // Delete all leading and trailing whitespace.
-            input = input.replaceAll(" +", " "); // Get rid of extra spaces.
+    // Easily converts an input token to a CommandType.
+    private CommandType stringToCommandType(String input) {
+        if (stringCommandTypeMap.containsKey(input)) {
+            return stringCommandTypeMap.get(input);
+        }
+        return CommandType.END;
+    }
 
-            // Extract the command.
+    // Parse a command line and create a Command object.
+    public Command parse(String input) {
+        // Start with a default, empty Command.
+        Command command = new Command();
+
+        // Any number of errors can occur while processing an input line, so we'll
+        // catch any exceptions and let the user know if there was a problem.
+        try {
+
+            // Start getting rid of unnecessary whitespace in the input line.
+            input = input.trim();
+            input = input.replaceAll(" +", " ");
+
+            // Extract the command. Split on first space into String[2].
             String[] commandSplit = input.split(" ", 2);
             command.commandTypeText = commandSplit[0];
             command.commandType = stringToCommandType(commandSplit[0]);
 
-            // Now handle each command separately.
+            // If there are no command parameters, we should go ahead and return.
+            if (commandSplit.length == 1) {
+                return command;
+            }
+
+            // CommandType token will be present for all lines, but all other input varies.
             String remainingInput = commandSplit[1];
             switch (command.commandType) {
 
                 case AddPlayer:
-                    String[] playerSplit = remainingInput.split(" ", 2);
-                    command.playerId = Integer.parseInt(playerSplit[0]);
-                    command.name = playerSplit[1];
-                    command.name = command.name.replaceAll("\"", ""); // remove quotation marks
+                    // AddPlayer [int id] "User Name"
+                    String[] addPlayerSplit = remainingInput.split(" ", 2);
+                    command.playerId = Integer.parseInt(addPlayerSplit[0]);
+                    // Extract their name, but we don't want the quotation marks.
+                    command.name = addPlayerSplit[1].replaceAll("\"", "");
                     break;
 
                 case AddGame:
-                    String[] gameSplit = remainingInput.split(" ", 2);
-                    command.gameId = Integer.parseInt(gameSplit[0]);
-                    command.name = gameSplit[1];
-                    command.name = command.name.replaceAll("\"", ""); // remove quotation marks
+                    // AddGame [int id] "Game Name"
+                    String[] addGameSplit = remainingInput.split(" ", 2);
+                    command.gameId = Integer.parseInt(addGameSplit[0]);
+                    // Extract the game's name, but we don't want the quotation marks.
+                    command.name = addGameSplit[1].replaceAll("\"", "");
                     break;
 
                 case AddAchievement:
-                    String[] achievementSplit = remainingInput.split(" ", 3);
-                    command.gameId = Integer.parseInt(achievementSplit[0]);
-                    command.achievementId = Integer.parseInt(achievementSplit[1]);
-                    String[] namePointsSplit = achievementSplit[2].split("\"", 3);
-                    // Note that namePointsSplit[0] should be an empty string.
+                    // AddAchievement [int gameId] [int achievementId] "Achievement Name" [int points]
+                    // Because of the line format, this requires multiple splits. First, let's
+                    // separate the first two IDs. Then work on the rest.
+                    String[] addAchievementSplit = remainingInput.split(" ", 3);
+                    command.gameId = Integer.parseInt(addAchievementSplit[0]);
+                    command.achievementId = Integer.parseInt(addAchievementSplit[1]);
+
+                    // Now that we've split those, we'll split the rest by quotation marks in order
+                    // to get the achievement name all in one. The first index should be empty, the
+                    // second index should contain the achievement name, and the third index should
+                    // contain the number of points, which MUST be trimmed of extra whitespace.
+                    String[] namePointsSplit = addAchievementSplit[2].split("\"", 3);
                     command.name = namePointsSplit[1];
                     command.points = Integer.parseInt(namePointsSplit[2].trim());
                     break;
 
                 case Plays:
-                    String[] playSplit = remainingInput.split(" ", 3);
-                    command.playerId = Integer.parseInt(playSplit[0]);
-                    command.gameId = Integer.parseInt(playSplit[1]);
-                    command.name = playSplit[2];
-                    command.name = command.name.replaceAll("\"", ""); // remove quotation marks
+                    // Plays [int playerId] [int gameId] "In-Game Name"
+                    String[] playsSplit = remainingInput.split(" ", 3);
+                    command.playerId = Integer.parseInt(playsSplit[0]);
+                    command.gameId = Integer.parseInt(playsSplit[1]);
+                    // Extract their name, but we don't want the quotation marks.
+                    command.name = playsSplit[2].replaceAll("\"", "");
                     break;
 
                 case AddFriends:
-                    String[] friendSplit = remainingInput.split(" ", 2);
-                    command.playerId = Integer.parseInt(friendSplit[0]);
-                    command.secondPlayerId = Integer.parseInt(friendSplit[1]);
+                    // AddFriends [int playerId] [int secondPlayerId]
+                    String[] addFriendsSplit = remainingInput.split(" ", 2);
+                    command.playerId = Integer.parseInt(addFriendsSplit[0]);
+                    command.secondPlayerId = Integer.parseInt(addFriendsSplit[1]);
                     break;
 
                 case Achieve:
-                    String[] achievedSplit = remainingInput.split(" ", 3);
-                    command.playerId = Integer.parseInt(achievedSplit[0]);
-                    command.gameId = Integer.parseInt(achievedSplit[1]);
-                    command.achievementId = Integer.parseInt(achievedSplit[2]);
+                    // Achieve [int playerId] [int gameId] [int achievementId]
+                    String[] achieveSplit = remainingInput.split(" ", 3);
+                    command.playerId = Integer.parseInt(achieveSplit[0]);
+                    command.gameId = Integer.parseInt(achieveSplit[1]);
+                    command.achievementId = Integer.parseInt(achieveSplit[2]);
                     break;
 
                 case FriendsWhoPlay:
-                    String[] gameFriendsSplit = remainingInput.split(" ", 2);
-                    command.playerId = Integer.parseInt(gameFriendsSplit[0]);
-                    command.gameId = Integer.parseInt(gameFriendsSplit[1]);
+                    // FriendsWhoPlay [int playerId] [int gameId]
+                    String[] friendsWhoPlaySplit = remainingInput.split(" ", 2);
+                    command.playerId = Integer.parseInt(friendsWhoPlaySplit[0]);
+                    command.gameId = Integer.parseInt(friendsWhoPlaySplit[1]);
                     break;
 
                 case ComparePlayers:
-                    String[] compareSplit = remainingInput.split(" ", 3);
-                    command.playerId = Integer.parseInt(compareSplit[0]);
-                    command.secondPlayerId = Integer.parseInt(compareSplit[1]);
-                    command.gameId = Integer.parseInt(compareSplit[2]);
+                    // ComparePlayers [int playerId] [int secondPlayerId] [int gameId]
+                    String[] comparePlayersSplit = remainingInput.split(" ", 3);
+                    command.playerId = Integer.parseInt(comparePlayersSplit[0]);
+                    command.secondPlayerId = Integer.parseInt(comparePlayersSplit[1]);
+                    command.gameId = Integer.parseInt(comparePlayersSplit[2]);
                     break;
 
                 case SummarizePlayer:
+                    // SummarizePlayer [int playerId]
                     command.playerId = Integer.parseInt(remainingInput);
                     break;
 
                 case SummarizeGame:
+                    // SummarizeGame [int gameId]
                     command.gameId = Integer.parseInt(remainingInput);
                     break;
 
                 case SummarizeAchievement:
-                    String[] summarizeSplit = remainingInput.split(" ", 2);
-                    command.gameId = Integer.parseInt(summarizeSplit[0]);
-                    command.achievementId = Integer.parseInt(summarizeSplit[1]);
+                    // SummarizeAchievement [int gameId] [int achievementId]
+                    String[] summarizeAchievementSplit = remainingInput.split(" ", 2);
+                    command.gameId = Integer.parseInt(summarizeAchievementSplit[0]);
+                    command.achievementId = Integer.parseInt(summarizeAchievementSplit[1]);
                     break;
 
                 case AchievementRanking:
@@ -121,16 +156,8 @@ public class CommandParser {
                     break;
             }
         } catch (Exception e) {
-            System.err.println("Invalid formatting for commmand type: " + command.commandTypeText);
-            System.err.println("INPUT: " + input);
+            System.err.println("Invalid command input: " + input);
         }
         return command;
-    }
-
-    private CommandType stringToCommandType(String input) {
-        if (stringCommandTypeMap.containsKey(input)) {
-            return stringCommandTypeMap.get(input);
-        }
-        return CommandType.END;
     }
 }
