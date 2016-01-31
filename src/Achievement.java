@@ -48,10 +48,14 @@ public class Achievement {
         return this.achievementOwners.size();
     }
 
+    public boolean hasAchievementOwner(Player player) {
+        return this.achievementOwners.contains(player);
+    }
+
     // Modifiers - change this achievement somehow.
 
     public void addOwner(Player player) {
-        if (!this.achievementOwners.contains(player)) {
+        if (!this.hasAchievementOwner(player)) {
             this.achievementOwners.add(player);
         }
     }

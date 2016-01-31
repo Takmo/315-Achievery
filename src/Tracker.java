@@ -167,7 +167,43 @@ public class Tracker {
                 break;
 
             case ComparePlayers:
-                System.err.println("Still working on this!");
+                // Verify that both players and the game exist.
+                if (player == null) {
+                    System.err.println("Invalid playerId: " + command.playerId + " does not exist.");
+                    return;
+                }
+                if (secondPlayer == null) {
+                    System.err.println("Invalid playerId: " + command.secondPlayerId + " does not exist.");
+                }
+                if (game == null) {
+                    System.err.println("Invalid gameId: " + command.gameId + "does not exist.");
+                    return;
+                }
+                if (!player.hasGame(game)) {
+                    System.err.println("Player " + command.playerId + " does not play " + command.gameId + ".");
+                    return;
+                }
+                if (!secondPlayer.hasGame(game)) {
+                    System.err.println("secondPlayer " + command.secondPlayerId + " does not play " + command.gameId + ".");
+                    return;
+                }
+
+                // Loop through all achievements and print out if either player has earned it.
+                System.out.println("Game: " + game.getName());
+                System.out.println(player.getName() + ": " + player.getPlayerGameData(game).getPoints());
+                System.out.println(secondPlayer.getName() + ": " + secondPlayer.getPlayerGameData(game).getPoints());
+                System.out.println("-------------------------------------------------");
+                for (Achievement ach : game.getAllAchievements()) {
+                    if (ach.hasAchievementOwner(player) && ach.hasAchievementOwner(secondPlayer)) {
+                        System.out.println("\"" + ach.getName() + "\": unlocked by both.");
+                    }
+                    else if (ach.hasAchievementOwner(player) && !ach.hasAchievementOwner(secondPlayer)) {
+                        System.out.println("\"" + ach.getName() + "\": unlocked by " + player.getName());
+                    }
+                    else if (!ach.hasAchievementOwner(player) && ach.hasAchievementOwner(secondPlayer)) {
+                        System.out.println("\"" + ach.getName() + "\": unlocked by " + secondPlayer.getName());
+                    }
+                }
                 break;
 
             case SummarizePlayer:
