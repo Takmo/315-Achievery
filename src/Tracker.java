@@ -267,7 +267,29 @@ public class Tracker {
                 break;
 
             case SummarizeAchievement:
-                System.err.println("Still working on this!");
+                // Verify that the game and the achievement exist.
+                if (game == null) {
+                    System.err.println("Invalid gameId: " + command.gameId + "does not exist.");
+                    return;
+                }
+                if (achievement == null) {
+                    System.err.println("Invalid achievementId: " + command.achievementId +
+                            " does not exist for gameId " + command.gameId + ".");
+                    return;
+                }
+
+                // Print general information.
+                System.out.println("Game: " + game.getName());
+                System.out.println("Achievement: " + achievement.getName());
+                System.out.println("Percent Players Unlocked: " +
+                        (100.0 * achievement.getNumAchievementOwners() / game.getNumPlayers()) + "%\n");
+
+                // Print all player information.
+                System.out.format("\n%-25s%-25s\n", "Player", "IGN");
+                System.out.println("--------------------------------------------------");
+                for (Player p : achievement.getAchievementOwners()) {
+                    System.out.format("%-25s%-25s\n", p.getName(), p.getPlayerGameData(game).getScreenName());
+                }
                 break;
 
             case AchievementRanking:
