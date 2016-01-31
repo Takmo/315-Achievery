@@ -225,7 +225,8 @@ public class Tracker {
 
                 // Loop through all games and print their information.
                 for (PlayerGameData pgd : player.getAllPlayerGameData()) {
-                    String achievementFraction = "";
+                    String achievementFraction = String.format("%d/%d",
+                            pgd.getNumAchievements(), pgd.getGame().getNumAchievements());
                     System.out.format("%-25s%-20s%-15s%-20s\n", pgd.getGame().getName(),
                             achievementFraction, pgd.getPoints(), pgd.getScreenName());
                 }
