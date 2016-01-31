@@ -96,5 +96,3 @@ Achieve 10004 1005 501
 Achieve 10004 1005 502
 
 AchievementRanking
-
-SummarizePlayer 10001

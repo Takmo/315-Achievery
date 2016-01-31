@@ -28,7 +28,16 @@ by running the following command.
 Once everything is compiled, you can run it using a line like this.
 
     java -jar Achievery.jar < whatever_file_here.txt
-;q
+
+## Note on Submission Time
+
+Because I'd rather not leave this in a messy state, I'm going to continue working
+on this for at least a few minutes after the 5:00pm submission time. If you will accept
+this branch as it is (albeit a few minutes after 5:00pm), I would love you forever.
+
+However, if you absolutely must use the repo as of 5:00pm, you'll want to view the
+repository as of commit
+[e90ccd5](https://github.com/Takmo/315-Achievery/tree/e90ccd569dd67551efb57843e9a591a7561ea384).
 
 ## Important Decisions
 

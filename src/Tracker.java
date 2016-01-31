@@ -227,6 +227,14 @@ public class Tracker {
                 break;
 
             case SummarizeGame:
+                // Collect all players and rank them by gamerscore.
+                ArrayList<Player> summarizeGamePlayers = game.getPlayers();
+                Collections.sort(summarizeGamePlayers, new PlayerComparator());
+
+                // Collect all game achievements and rank them by point value.
+                ArrayList<Achievement> summarizeGameAchievements = game.getAllAchievements();
+                Collections.sort(summarizeGameAchievements, new AchievementComparator());
+
                 // Print the general information.
                 System.out.println("Game: " + game.getName());
                 System.out.println("Total Players: " + game.getNumPlayers());
@@ -234,9 +242,8 @@ public class Tracker {
                 // Print player information.
                 System.out.format("\n%-20s%-15s%-20s\n", "Player", "Gamerscore", "IGN");
                 System.out.println("------------------------------------------------------------");
-                ArrayList<Player> summarizePlayers = game.getPlayers();
-                Collections.sort(summarizePlayers, new PlayerComparator());
-                for (Player p : summarizePlayers) {
+
+                for (Player p : summarizeGamePlayers) {
                     System.out.format("%-20s%-15s%-20s\n", p.getName(), p.getGameData(game).getGamerscore(),
                             p.getGameData(game).getScreenName());
                 }
@@ -244,9 +251,8 @@ public class Tracker {
                 // Print achievement stats.
                 System.out.format("\n%-25s%-15s\n", "Achievement", "Times Achieved");
                 System.out.println("----------------------------------------");
-                ArrayList<Achievement> gameAchievements = game.getAllAchievements();
-                Collections.sort(gameAchievements, new AchievementComparator());
-                for (Achievement ach : gameAchievements) {
+
+                for (Achievement ach : summarizeGameAchievements) {
                     System.out.format("%-25s%-15s\n", ach.getName(), ach.getNumPlayers());
                 }
                 break;
@@ -259,7 +265,7 @@ public class Tracker {
                         (100.0 * achievement.getNumPlayers() / game.getNumPlayers()) + "%\n");
 
                 // Print all player information.
-                System.out.format("\n%-25s%-25s\n", "Player", "IGN");
+                System.out.format("%-25s%-25s\n", "Player", "IGN");
                 System.out.println("--------------------------------------------------");
                 for (Player p : achievement.getPlayers()) {
                     System.out.format("%-25s%-25s\n", p.getName(), p.getGameData(game).getScreenName());
